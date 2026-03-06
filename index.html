@@ -690,45 +690,65 @@
         /* =========================================
            9. THE FORM
            =========================================
-        */
-        .form-wrap { max-width: 800px; margin: 0 auto; background: var(--surface); padding: 60px; border-radius: 20px; border: 1px solid var(--border); }
+      <div id="reserve" class="form-wrap">
+    <h2 style="text-align: center; margin-bottom: 40px; font-weight: 900;">RESERVE ORDER</h2>
+    <form id="my-form" action="https://formspree.io/f/xpqyzybd" method="POST">
         
-        .row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        @media (max-width: 600px) { .row { grid-template-columns: 1fr; } }
+        <div class="row">
+            <div class="input-group">
+                <label>Full Name</label>
+                <input type="text" name="name" required placeholder="Ex: John Doe">
+            </div>
+            <div class="input-group">
+                <label>Contact Number</label>
+                <input type="tel" name="phone" required placeholder="000-000-0000">
+            </div>
+        </div>
+        <div class="input-group">
+            <label>Delivery Address</label>
+            <textarea name="address" rows="2" required placeholder="Street Name, City"></textarea>
+        </div>
+        <div class="input-group">
+            <label>Package Selection</label>
+            <select id="pack-selector" name="package" required>
+                <option value="" disabled selected>Click a card from the menu above</option>
+                <option value="1 Bag - $3">Starter Pack — $3.00</option>
+                <option value="2 Bags - $5">Double Pack — $5.00</option>
+                <option value="3 Bags - $8">Trio Bundle — $8.00</option>
+                <option value="4 Bags - $10">Squad Box — $10.00</option>
+                <option value="5 Bags - $13">Elite Pack — $13.00</option>
+                <option value="BULK ORDER">Bulk Order (10+ Bags)</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label>Special Requests</label>
+            <textarea name="requests" rows="3" placeholder="List bulk quantity or specific candy types here..."></textarea>
+        </div>
+        <button type="submit" class="btn-submit">Finalize Order</button>
+    </form>
+</div>
 
-        .input-group { margin-bottom: 25px; }
-        .input-group label { display: block; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; color: var(--text-dim); }
-        
-        input, select, textarea {
-            width: 100%;
-            padding: 18px;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            color: var(--text);
-            font-size: 1rem;
-            border-radius: 8px;
-            outline: none;
-        }
-
-        input:focus { border-color: var(--primary); }
-
-        .btn-submit {
-            width: 100%;
-            padding: 25px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            font-size: 1.3rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .btn-submit:hover { background: var(--secondary); color: black; transform: scale(1.02); }
-
-        /* =========================================
+<script>
+    const form = document.getElementById("my-form");
+    
+    async function handleSubmit(event) {
+        event.preventDefault();
+        const data = new FormData(event.target);
+        fetch(event.target.action, {
+            method: form.method,
+            body: data,
+            headers: { 'Accept': 'application/json' }
+        }).then(response => {
+            if (response.ok) {
+                // This forces the redirect to your page for FREE
+                window.location.href = "https://gawyntgg.github.io/ThankyouGS-Candy/";
+            } else {
+                alert("Oops! There was a problem. Please try again.");
+            }
+        });
+    }
+    form.addEventListener("submit", handleSubmit);
+</script>
            10. LAG-FREE PARTICLE ENGINE (THE FIX)
            =========================================
         */
