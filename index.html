@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GS Candy | Save More, Ski More!</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;900&display=swap');
+
+        :root {
+            --primary: #ff4757;
+            --secondary: #2ed573;
+            --accent: #ffa502;
+            --dark: #2f3542;
+            --bg: #fffaf0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--bg);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 { font-family: 'Fredoka One', cursive; }
+
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 5px solid var(--accent);
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; position: relative; z-index: 10; }
+
+        /* Progress Bar */
+        .goal-box {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .bar-bg {
+            background: #eee;
+            height: 25px;
+            border-radius: 50px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            background: var(--secondary);
+            width: 15%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 900;
+            font-size: 0.8rem;
+        }
+
+        /* Pricing Grid */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .price-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 3px solid #eee;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .price-card:hover { transform: scale(1.03); border-color: var(--primary); }
+
+        .price-card.best-deal { border-color: var(--secondary); background: #f0fff4; }
+
+        .tag {
+            background: var(--primary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-weight: 900;
+            font-size: 0.8rem;
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .amount { font-size: 2.5rem; color: var(--secondary); margin: 10px 0; }
+        .savings { color: var(--primary); font-weight: 900; font-size: 1.1rem; }
+
+        /* Form */
+        .order-form {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0 20px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-family: inherit;
+        }
+
+        button {
+            width: 100%;
+            padding: 18px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover { background: #ff6b81; transform: translateY(-2px); }
+
+        /* Rain */
+        .rain { position: fixed; top: -50px; pointer-events: none; z-index: 1; animation: fall linear forwards; }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>GS CANDY 🍬</h1>
+    <p>Help Gawynt & Satvik hit the slopes!</p>
+</header>
+
+<div class="container">
+    <div class="goal-box">
+        <h3>Ski Trip Progress</h3>
+        <div class="bar-bg"><div class="bar-fill">15%</div></div>
+        <p><strong>$75</strong> raised of <strong>$500</strong> goal</p>
+    </div>
+
+    <div class="pricing-grid">
+        <div class="price-card">
+            <h3>1 Bag</h3>
+            <div class="amount">$3.00</div>
+            <p>The Starter Snack</p>
+        </div>
+
+        <div class="price-card">
+            <div class="tag">SAVE $1.00</div>
+            <h3>2 Bags</h3>
+            <div class="amount">$5.00</div>
+            <p class="savings">Buy More & Save!</p>
+        </div>
+
+        <div class="price-card">
+            <div class="tag">SAVE $2.00</div>
+            <h3>3 Pack</h3>
+            <div class="amount">$7.00</div>
+            <p class="savings">Bigger Discount!</p>
+        </div>
+
+        <div class="price-card">
+            <div class="tag">SAVE $3.00</div>
+            <h3>4 Pack</h3>
+            <div class="amount">$9.00</div>
+            <p class="savings">Family Value!</p>
+        </div>
+
+        <div class="price-card">
+            <div class="tag">SAVE $4.00</div>
+            <h3>5 Pack</h3>
+            <div class="amount">$11.00</div>
+            <p class="savings">The Party Pack!</p>
+        </div>
+
+        <div class="price-card best-deal">
+            <div class="tag" style="background: var(--secondary)">SAVE $10.00</div>
+            <h3>10 Bag Mega Pack</h3>
+            <div class="amount">$20.00</div>
+            <p><strong>Best Value for the Ski Trip!</strong></p>
+        </div>
+    </div>
+
+    <div class="order-form">
+        <h2 style="text-align:center; margin-bottom:20px;">Place Your Order</h2>
+        <form action="https://formspree.io/f/xpqyzybd" method="POST">
+            <input type="text" name="Name" placeholder="Full Name" required>
+            <input type="tel" name="Phone" placeholder="Phone Number" required>
+            <textarea name="Address" rows="3" placeholder="Full Address for Delivery" required></textarea>
+            
+            <label style="font-weight:bold">Select Your Candy Bundle:</label>
+            <select name="Package" required>
+                <option value="1 Bag - $3">1 Bag - $3.00</option>
+                <option value="2 Bags - $5">2 Bags - $5.00 (Save $1)</option>
+                <option value="3 Bags - $7">3 Bags - $7.00 (Save $2)</option>
+                <option value="4 Bags - $9">4 Bags - $9.00 (Save $3)</option>
+                <option value="5 Bags - $11">5 Bags - $11.00 (Save $4)</option>
+                <option value="10 Bags - $20">10 Bags - $20.00 (Save $10!)</option>
+            </select>
+
+            <button type="submit">Order & Support Us!</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function rain() {
+        const items = ['🍬', '🍭', '🍫', '❄️'];
+        const e = document.createElement('div');
+        e.classList.add('rain');
+        e.innerText = items[Math.floor(Math.random() * items.length)];
+        e.style.left = Math.random() * 100 + 'vw';
+        e.style.animationDuration = (Math.random() * 2 + 3) + 's';
+        e.style.fontSize = Math.random() * 20 + 20 + 'px';
+        document.body.appendChild(e);
+        setTimeout(() => e.remove(), 5000);
+    }
+    setInterval(rain, 300);
+</script>
+
+</body>
+</html>
