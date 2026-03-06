@@ -485,3 +485,89 @@
     </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GS CANDY 2026 | THE GOLD STANDARD</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Outfit:wght@400;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #050505; --surface: #0f0f0f; --text: #ffffff; --text-dim: #a0a0a0;
+            --primary: #ff2d55; --secondary: #00ff88; --border: #1a1a1a;
+            --glow: rgba(255, 45, 85, 0.2); --trans: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        
+        /* Form Redirect Workflow */
+        
+        
+        .form-wrap { max-width: 800px; margin: 0 auto; background: var(--surface); padding: 60px; border-radius: 20px; border: 1px solid var(--border); }
+        .row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .input-group { margin-bottom: 25px; }
+        .btn-submit { width: 100%; padding: 25px; background: var(--primary); color: white; border: none; font-size: 1.3rem; font-weight: 900; text-transform: uppercase; border-radius: 8px; cursor: pointer; }
+        
+        /* Particle styling remains as per your original request */
+        .particle { position: fixed; top: -50px; z-index: 1; pointer-events: none; will-change: transform; animation: gs-lag-free-fall linear forwards; }
+        @keyframes gs-lag-free-fall { to { transform: translate3d(100px, 110vh, 0) rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <div id="reserve" class="form-wrap">
+        <h2 style="text-align: center; margin-bottom: 40px; font-weight: 900;">RESERVE ORDER</h2>
+        
+        <form action="https://formspree.io/f/xpqyzybd" method="POST">
+            <input type="hidden" name="_next" value="https://gawyntgg.github.io/ThankyouGS-Candy/">
+            
+            <div class="row">
+                <div class="input-group">
+                    <label>Full Name</label>
+                    <input type="text" name="name" required placeholder="Ex: John Doe">
+                </div>
+                <div class="input-group">
+                    <label>Contact Number</label>
+                    <input type="tel" name="phone" required placeholder="000-000-0000">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Delivery Address</label>
+                <textarea name="address" rows="2" required placeholder="Street Name, City"></textarea>
+            </div>
+            <div class="input-group">
+                <label>Package Selection</label>
+                <select id="pack-selector" name="package" required>
+                    <option value="" disabled selected>Click a card from the menu above</option>
+                    <option value="1 Bag - $3">Starter Pack — $3.00</option>
+                    <option value="2 Bags - $5">Double Pack — $5.00</option>
+                    <option value="3 Bags - $8">Trio Bundle — $8.00</option>
+                    <option value="4 Bags - $10">Squad Box — $10.00</option>
+                    <option value="5 Bags - $13">Elite Pack — $13.00</option>
+                </select>
+            </div>
+            <button type="submit" class="btn-submit">Finalize Order</button>
+        </form>
+    </div>
+
+    <script>
+        // Particle Engine Logic
+        const icons = ['🍬', '🍭', '✨'];
+        function spawnLagFreeRain() {
+            const div = document.createElement('div');
+            div.className = 'particle';
+            div.innerText = icons[Math.floor(Math.random() * icons.length)];
+            div.style.left = Math.random() * 100 + 'vw';
+            div.style.animationDuration = Math.random() * 4 + 4 + 's';
+            document.body.appendChild(div);
+            setTimeout(() => div.remove(), 8000);
+        }
+        setInterval(spawnLagFreeRain, 600);
+    </script>
+</body>
+</html>
