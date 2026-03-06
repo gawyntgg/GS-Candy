@@ -690,6 +690,456 @@
         /* =========================================
            9. THE FORM
            =========================================
+        */
+        .form-wrap { max-width: 800px; margin: 0 auto; background: var(--surface); padding: 60px; border-radius: 20px; border: 1px solid var(--border); }
+        
+        .row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 600px) { .row { grid-template-columns: 1fr; } }
+
+        .input-group { margin-bottom: 25px; }
+        .input-group label { display: block; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; color: var(--text-dim); }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 18px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 1rem;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--primary); }
+
+        .btn-submit {
+            width: 100%;
+            padding: 25px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-size: 1.3rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-submit:hover { background: var(--secondary); color: black; transform: scale(1.02); }
+
+        /* =========================================
+           10. LAG-FREE PARTICLE ENGINE (THE FIX)
+           =========================================
+        */
+        .particle {
+            position: fixed; 
+            top: -50px;
+            z-index: 1;
+            pointer-events: none;
+            user-select: none;
+            /* Use transform3d for Hardware Acceleration */
+            will-change: transform;
+            animation: gs-lag-free-fall linear forwards;
+        }
+
+        @keyframes gs-lag-free-fall {
+            0% {
+                transform: translate3d(0, 0, 0) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 0.8; }
+            100% {
+                transform: translate3d(100px, 110vh, 0) rotate(360deg);
+                opacity: 0.8;
+            }
+        }
+
+        footer {
+            padding: 120px 5% 60px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            margin-top: 100px;
+        }
+
+        .f-logo { font-size: 2rem; font-weight: 900; color: var(--primary); margin-bottom: 20px; }
+        .f-copy { font-size: 0.85rem; color: var(--text-dim); letter-spacing: 1px; }
+
+    </style>
+</head>
+<body>
+
+    <div id="gs-loader">
+        <div class="loader-text">GS CANDY</div>
+        <div class="loader-track"><div class="loader-fill"></div></div>
+    </div>
+
+    <nav>
+        <div class="nav-logo">GS CANDY</div>
+        <div class="nav-actions">
+            <a href="#menu" class="nav-btn">Shop Now</a>
+            <a href="#bulk" class="nav-btn" style="background: var(--secondary); color: black;">Bulk Orders</a>
+            <button class="theme-btn" onclick="toggleStyle()">🌓</button>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h1>CANDY<br>REFINED.</h1>
+        <p>Premium selection curated by Gawynt and Satvik. Experience the Gold Standard of sweets in 2026. Fast, direct, and delicious.</p>
+    </header>
+
+    <div class="container">
+        
+        <div class="split-section">
+            <div class="panel">
+                <h2>OUR MISSION</h2>
+                <p>Since our inception, GS Candy has focused on one thing: Quality. Founded by Gawynt and Satvik, we bridge the gap between local treats and professional service. Every bag is hand-selected to ensure you get the absolute best.</p>
+            </div>
+            <div class="panel">
+                <div class="progress-label">
+                    <span>2026 GROWTH TARGET</span>
+                    <span>15% COMPLETE</span>
+                </div>
+                <div class="progress-outer"><div class="progress-inner"></div></div>
+                <p style="font-weight: 800; color: var(--secondary); font-size: 1.2rem;">Raised: $75.00 / Goal: $500.00</p>
+                <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 10px;">Help us expand our operations by securing your order today.</p>
+            </div>
+        </div>
+
+        <div id="menu" class="shop-header">
+            <h2>THE MENU</h2>
+            <p>Select your 2026 Confectionery Package</p>
+        </div>
+
+        <div class="pricing-table">
+            <div class="candy-pack" onclick="setPack('1 Bag - $3', this)">
+                <h4>Starter</h4><div class="price-tag">$3</div><p class="pack-info">1 BAG</p>
+            </div>
+            <div class="candy-pack" onclick="setPack('2 Bags - $5', this)">
+                <h4>Double</h4><div class="price-tag">$5</div><p class="pack-info">2 BAGS</p>
+            </div>
+            <div class="candy-pack" onclick="setPack('3 Bags - $8', this)">
+                <h4>Trio</h4><div class="price-tag">$8</div><p class="pack-info">3 BAGS</p>
+            </div>
+            <div class="candy-pack" onclick="setPack('4 Bags - $10', this)">
+                <h4>Squad</h4><div class="price-tag">$10</div><p class="pack-info">4 BAGS</p>
+            </div>
+            <div class="candy-pack" onclick="setPack('5 Bags - $13', this)">
+                <h4>Elite</h4><div class="price-tag">$13</div><p class="pack-info">5 BAGS</p>
+            </div>
+        </div>
+
+        <div id="bulk" class="bulk-banner">
+            <h2>BULK & EVENTS</h2>
+            <p>Planning a party or corporate event? We offer special custom pricing for orders of 10 bags or more.</p>
+            <a href="#reserve" class="nav-btn" style="padding: 15px 40px; font-size: 1.1rem;">Inquire Below</a>
+        </div>
+
+        <div id="reserve" class="form-wrap">
+            <h2 style="text-align: center; margin-bottom: 40px; font-weight: 900;">RESERVE ORDER</h2>
+            <form action="https://formspree.io/f/xpqyzybd" method="POST">
+                <div class="row">
+                    <div class="input-group">
+                        <label>Full Name</label>
+                        <input type="text" name="name" required placeholder="Ex: John Doe">
+                    </div>
+                    <div class="input-group">
+                        <label>Contact Number</label>
+                        <input type="tel" name="phone" required placeholder="000-000-0000">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Delivery Address</label>
+                    <textarea name="address" rows="2" required placeholder="Street Name, City"></textarea>
+                </div>
+                <div class="input-group">
+                    <label>Package Selection</label>
+                    <select id="pack-selector" name="package" required>
+                        <option value="" disabled selected>Click a card from the menu above</option>
+                        <option value="1 Bag - $3">Starter Pack — $3.00</option>
+                        <option value="2 Bags - $5">Double Pack — $5.00</option>
+                        <option value="3 Bags - $8">Trio Bundle — $8.00</option>
+                        <option value="4 Bags - $10">Squad Box — $10.00</option>
+                        <option value="5 Bags - $13">Elite Pack — $13.00</option>
+                        <option value="BULK ORDER">Bulk Order (10+ Bags)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Special Requests</label>
+                    <textarea name="requests" rows="3" placeholder="List bulk quantity or specific candy types here..."></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Finalize Order</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="f-logo">GS CANDY</div>
+        <p class="f-copy">© 2026 GS CANDY OPERATIONS. ALL SALES FINAL.</p>
+    </footer>
+
+    <script>
+        window.addEventListener('load', () => {
+            setTimeout(() => { document.body.classList.add('is-loaded'); }, 2000); 
+        });
+
+        function toggleStyle() {
+            const html = document.documentElement;
+            const target = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', target);
+        }
+
+        function setPack(val, el) {
+            document.getElementById('pack-selector').value = val;
+            document.querySelectorAll('.candy-pack').forEach(p => p.classList.remove('selected'));
+            el.classList.add('selected');
+            document.getElementById('reserve').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // =========================================
+        // PERFORMANCE-FIRST PARTICLE ENGINE
+        // =========================================
+        const icons = ['🍬', '🍭', '✨', '🍫', '❄️'];
+        let activeParticles = 0;
+        const maxParticles = 25; // Safety cap to prevent lag
+
+        function spawnLagFreeRain() {
+            if (activeParticles >= maxParticles) return;
+
+            const div = document.createElement('div');
+            div.className = 'particle';
+            div.innerText = icons[Math.floor(Math.random() * icons.length)];
+            
+            // Random styling
+            const size = Math.random() * 20 + 15;
+            const duration = Math.random() * 4 + 4;
+            div.style.left = Math.random() * 100 + 'vw';
+            div.style.fontSize = size + 'px';
+            div.style.animationDuration = duration + 's';
+            
+            // Use low opacity for background feel
+            div.style.opacity = size < 20 ? '0.4' : '0.8';
+
+            document.body.appendChild(div);
+            activeParticles++;
+
+            // Clean up to keep memory clear
+            setTimeout(() => {
+                div.remove();
+                activeParticles--;
+            }, duration * 1000);
+        }
+
+        // Reduced frequency for better performance
+        setInterval(spawnLagFreeRain, 600);
+    </script>
+</body>
+</html>            --glow: rgba(0, 0, 0, 0.05);
+        }
+
+        /* =========================================
+           2. GLOBAL SETUP
+           =========================================
+        */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+            transition: background 0.5s var(--trans), color 0.5s var(--trans);
+        }
+
+        h1, h2, h3, .nav-logo { font-family: 'Outfit', sans-serif; }
+
+        /* =========================================
+           3. LOADING SCREEN (GS CANDY)
+           =========================================
+        */
+        #gs-loader {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .loader-text {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: -2px;
+            margin-bottom: 20px;
+            animation: gs-pulse 1.5s infinite;
+        }
+
+        @keyframes gs-pulse {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+
+        .loader-track { width: 200px; height: 3px; background: #1a1a1a; border-radius: 10px; overflow: hidden; }
+        .loader-fill { height: 100%; width: 0%; background: var(--secondary); animation: fill 2.5s forwards; }
+        @keyframes fill { to { width: 100%; } }
+        body.is-loaded #gs-loader { opacity: 0; visibility: hidden; }
+
+        /* =========================================
+           4. NAVIGATION (WITH QUICK-NAV)
+           =========================================
+        */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(var(--bg), 0.8);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-logo { font-weight: 900; font-size: 1.5rem; color: var(--primary); }
+
+        .nav-actions { display: flex; gap: 15px; align-items: center; }
+
+        .nav-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: 0.3s;
+        }
+
+        .nav-btn:hover { background: var(--secondary); color: #000; }
+
+        .theme-btn {
+            background: var(--text);
+            color: var(--bg);
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        /* =========================================
+           5. HERO SECTION
+           =========================================
+        */
+        .hero {
+            padding: 220px 5% 120px;
+            text-align: center;
+            background: radial-gradient(circle at top, var(--glow), transparent);
+        }
+
+        .hero h1 {
+            font-size: clamp(3.5rem, 15vw, 10rem);
+            font-weight: 800;
+            line-height: 0.8;
+            margin-bottom: 25px;
+            letter-spacing: -5px;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-dim);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* =========================================
+           6. BRAND STORY & GOALS
+           =========================================
+        */
+        .container { max-width: 1200px; margin: 0 auto; padding: 100px 5%; }
+
+        .split-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 80px;
+        }
+
+        @media (max-width: 850px) { .split-section { grid-template-columns: 1fr; } }
+
+        .panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 60px;
+            border-radius: 12px;
+        }
+
+        .panel h2 { font-size: 2.2rem; margin-bottom: 20px; color: var(--primary); }
+
+        .progress-label { display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 12px; }
+        .progress-outer { height: 16px; background: var(--border); border-radius: 20px; overflow: hidden; margin-bottom: 15px; }
+        .progress-inner { width: 15%; height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); }
+
+        /* =========================================
+           7. THE SHOP (MENU)
+           =========================================
+        */
+        .shop-header { text-align: center; margin-bottom: 60px; }
+        .shop-header h2 { font-size: 4rem; font-weight: 800; }
+
+        .pricing-table {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 100px;
+        }
+
+        .candy-pack {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            padding: 50px 20px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 15px;
+            transition: 0.4s var(--trans);
+        }
+
+        .candy-pack:hover { border-color: var(--primary); transform: translateY(-10px); }
+        .candy-pack.selected { border-color: var(--secondary); background: rgba(0, 255, 136, 0.05); }
+
+        .candy-pack h4 { font-size: 0.8rem; text-transform: uppercase; color: var(--text-dim); letter-spacing: 2px; }
+        .price-tag { font-size: 4.5rem; font-weight: 900; margin: 15px 0; }
+        .pack-info { font-weight: 800; color: var(--primary); }
+
+        /* =========================================
+           8. BULK ORDERS SECTION
+           =========================================
+        */
+        .bulk-banner {
+            background: linear-gradient(45deg, var(--surface), #1a1a1a);
+            border: 2px dashed var(--secondary);
+            padding: 80px 40px;
+            text-align: center;
+            border-radius: 20px;
+            margin-bottom: 100px;
+        }
+
+        .bulk-banner h2 { font-size: 3rem; margin-bottom: 20px; color: var(--secondary); }
+        .bulk-banner p { max-width: 600px; margin: 0 auto 30px; font-size: 1.1rem; }
+
+        /* =========================================
+           9. THE FORM
+           =========================================
       <div id="reserve" class="form-wrap">
     <h2 style="text-align: center; margin-bottom: 40px; font-weight: 900;">RESERVE ORDER</h2>
     <form id="my-form" action="https://formspree.io/f/xpqyzybd" method="POST">
