@@ -7,7 +7,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Outfit:wght@400;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Outfit:wght@400;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
@@ -19,6 +19,7 @@
             --secondary: #00ff88; 
             --border: #1a1a1a;
             --nav-bg: rgba(10, 10, 10, 0.95);
+            --glitch-speed: 0.3s;
         }
 
         [data-theme="light"] {
@@ -41,17 +42,30 @@
             font-family: 'Inter', sans-serif;
             line-height: 1.6;
             transition: background 0.3s ease;
+            overflow-x: hidden;
         }
 
-        h1, h2, h3, .nav-logo, .brand-name, .price-tag, .btn-submit, .f-logo, .panel h2, .story-title { 
+        /* TECH OVERLAY EFFECTS */
+        body::before {
+            content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image: radial-gradient(rgba(0, 255, 136, 0.05) 1px, transparent 0);
+            background-size: 40px 40px; pointer-events: none; z-index: 100;
+        }
+
+        .scanline {
+            width: 100%; height: 100px; z-index: 101; background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 255, 136, 0.02) 50%, rgba(0, 0, 0, 0) 100%);
+            opacity: 0.1; position: fixed; bottom: 100%; animation: scanline 8s linear infinite; pointer-events: none;
+        }
+        @keyframes scanline { 0% { bottom: 100%; } 100% { bottom: -100px; } }
+
+        h1, h2, h3, .nav-logo, .brand-name, .price-tag, .btn-submit, .f-logo, .panel h2, .story-title, .tech-label { 
             font-family: 'Outfit', sans-serif; 
             font-weight: 800;
+            text-transform: uppercase;
         }
 
-        /* =========================================
-            NAV BAR
-            =========================================
-        */
+        code, .status-bar { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; }
+
         nav {
             position: fixed; top: 0; left: 0; width: 100%; padding: 15px 5%;
             display: flex; justify-content: space-between; align-items: center; z-index: 9999;
@@ -60,139 +74,188 @@
             -webkit-backdrop-filter: blur(25px);
             border-bottom: 2px solid var(--border);
         }
-        .nav-logo { font-size: 1.6rem; color: var(--primary); letter-spacing: -1px; }
+        .nav-logo { font-size: 1.6rem; color: var(--primary); letter-spacing: -1px; display: flex; align-items: center; gap: 10px; }
+        .nav-links { display: flex; gap: 25px; margin-left: 40px; }
+        .nav-links a { color: var(--text-dim); text-decoration: none; font-weight: 700; font-size: 0.8rem; letter-spacing: 1px; transition: 0.3s; }
+        .nav-links a:hover { color: var(--secondary); text-shadow: 0 0 10px var(--secondary); }
+
         .nav-actions { display: flex; gap: 15px; align-items: center; }
         .nav-btn {
-            background: var(--primary); color: white; border: none; padding: 10px 20px;
-            font-weight: 800; border-radius: 8px; cursor: pointer; text-decoration: none; font-size: 0.85rem;
+            background: var(--primary); color: white; border: none; padding: 10px 24px;
+            font-weight: 800; border-radius: 4px; cursor: pointer; text-decoration: none; font-size: 0.85rem;
+            box-shadow: 0 0 15px rgba(255, 45, 85, 0.3); transition: 0.3s;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
         }
+        .nav-btn:hover { transform: scale(1.05); box-shadow: 0 0 25px var(--primary); filter: brightness(1.2); }
 
-        /* =========================================
-            HERO & PANELS
-            =========================================
-        */
-        .hero { padding: 200px 5% 60px; text-align: center; }
-        .hero h1 { font-size: clamp(3.5rem, 12vw, 9rem); line-height: 0.8; letter-spacing: -4px; margin-bottom: 20px; }
+        .hero { padding: 220px 5% 80px; text-align: center; position: relative; }
+        .hero h1 { font-size: clamp(3.5rem, 12vw, 9rem); line-height: 0.8; letter-spacing: -4px; margin-bottom: 20px; animation: flicker 3s infinite; }
+        @keyframes flicker {
+            0%, 18%, 22%, 25%, 53%, 57%, 100% { text-shadow: 0 0 4px var(--primary); }
+            20%, 24%, 55% { text-shadow: none; }
+        }
         .hero p { color: var(--text-dim); max-width: 600px; margin: 0 auto; font-size: 1.1rem; }
+        
+        .status-indicator { 
+            display: inline-flex; align-items: center; gap: 8px; background: rgba(0, 255, 136, 0.1); 
+            padding: 5px 15px; border-radius: 20px; border: 1px solid var(--secondary); 
+            color: var(--secondary); margin-bottom: 20px; font-weight: 900; font-size: 0.7rem; letter-spacing: 2px;
+        }
+        .dot { width: 8px; height: 8px; background: var(--secondary); border-radius: 50%; animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0.3; } }
 
-        .container { max-width: 1100px; margin: 0 auto; padding: 40px 5%; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 40px 5%; position: relative; z-index: 5; }
 
-        .panel { background: var(--surface); border: 1px solid var(--border); padding: 40px; border-radius: 20px; margin-bottom: 20px; }
-        .progress-outer { height: 14px; background: var(--border); border-radius: 10px; overflow: hidden; margin: 15px 0; }
+        .panel { background: var(--surface); border: 1px solid var(--border); padding: 40px; border-radius: 20px; margin-bottom: 20px; position: relative; overflow: hidden; }
+        .panel::after { content: "SYSTEM_READOUT"; position: absolute; bottom: 10px; right: 20px; font-family: 'JetBrains Mono'; font-size: 0.6rem; color: #333; }
+        
+        .progress-outer { height: 14px; background: var(--border); border-radius: 10px; overflow: hidden; margin: 15px 0; border: 1px solid #222; }
         .progress-inner { 
             width: 15%; height: 100%; background: var(--primary); 
-            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1), background 0.6s ease;
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 20px var(--primary);
         }
 
-        /* ABOUT ME FONT SIZE FIX */
         .story-panel {
-            background: linear-gradient(145deg, var(--surface), var(--bg));
+            background: linear-gradient(145deg, #0a0a0a, #050505);
             border: 1px solid var(--border);
             padding: 40px; border-radius: 20px; margin-bottom: 40px; text-align: center;
+            border-left: 4px solid var(--primary);
         }
-        .story-text {
-            font-size: 1.25rem;
-            color: var(--text-dim);
-            max-width: 800px;
-            margin: 0 auto;
-            line-height: 1.5;
-        }
+        .story-text { font-size: 1.25rem; color: var(--text-dim); max-width: 800px; margin: 0 auto; line-height: 1.5; }
 
-        /* =========================================
-            SHOP & SELECTION
-            =========================================
-        */
-        .shop-header { text-align: center; margin: 60px 0 30px; }
-        .pricing-table, .brand-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 40px; }
+        .shop-header { text-align: center; margin: 60px 0 30px; transition: 0.5s; padding: 20px; border-radius: 15px; scroll-margin-top: 100px; }
+        .pricing-table, .brand-grid, .payment-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 40px; }
 
         .card {
             background: var(--surface); border: 2px solid var(--border); padding: 40px 20px;
-            text-align: center; cursor: pointer; border-radius: 18px; transition: 0.3s ease;
+            text-align: center; cursor: pointer; border-radius: 18px; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
         }
-        .card:hover { border-color: var(--primary); transform: translateY(-5px); }
-        .card.selected { border-color: var(--secondary); background: rgba(0, 255, 136, 0.05); }
+        .card:hover { border-color: var(--primary); transform: translateY(-10px); background: #151515; }
+        .card.selected { border-color: var(--secondary); background: rgba(0, 255, 136, 0.05); box-shadow: 0 15px 30px rgba(0, 255, 136, 0.15); }
 
         .price-tag { font-size: 3.5rem; margin: 10px 0; }
-        .brand-name { font-size: 1.8rem; color: var(--primary); }
 
-        .bulk-banner {
-            background: var(--surface); border: 2px dashed var(--secondary); padding: 50px;
-            text-align: center; border-radius: 20px; margin: 60px 0;
+        .pieces-header-wrap h2 { animation: pulse-glow 2s infinite alternate; }
+        @keyframes pulse-glow { 0% { text-shadow: 0 0 5px var(--secondary); } 100% { text-shadow: 0 0 20px var(--secondary), 0 0 40px var(--primary); } }
+        
+        .piece-container { display: flex; justify-content: center; gap: 30px; margin-bottom: 40px; flex-wrap: wrap; perspective: 1200px; }
+        .neon-card {
+            position: relative; background: var(--surface); border: 2px solid transparent; padding: 5px; border-radius: 20px; cursor: pointer;
+            transition: 0.4s; overflow: hidden; width: 100%; max-width: 260px; transform-style: preserve-3d;
         }
+        .neon-card:hover { transform: translateY(-12px) scale(1.05); box-shadow: 0 25px 50px rgba(0, 255, 136, 0.3); }
+        .neon-card.selected { border-color: var(--secondary); box-shadow: 0 0 30px var(--secondary); }
+
+        .neon-card::before {
+            content: ""; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: conic-gradient(from 0deg, transparent 0%, var(--secondary) 25%, var(--primary) 50%, transparent 50%);
+            animation: spin-neon 3s linear infinite;
+        }
+        .neon-card-inner {
+            position: relative; background: #0a0a0a; border-radius: 16px; padding: 40px 20px; text-align: center; z-index: 2; height: 100%;
+        }
+        @keyframes spin-neon { 100% { transform: rotate(360deg); } }
+
+        .payment-card {
+            border: 1px solid var(--border); padding: 30px; border-radius: 15px; text-align: center; cursor: pointer;
+            transition: 0.3s; background: var(--surface); position: relative;
+        }
+        .payment-card h3 { color: var(--primary); margin-bottom: 10px; font-size: 1.5rem; }
+        .payment-card p { font-size: 0.8rem; color: var(--text-dim); }
+        .payment-card.selected { border-color: var(--secondary); background: rgba(0, 255, 136, 0.1); }
+        .payment-card.selected::after {
+            content: "AUTH_GRANTED"; position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+            background: var(--secondary); color: #000; padding: 2px 10px; border-radius: 5px; font-size: 0.6rem; font-weight: 900;
+        }
+
+        .form-wrap { max-width: 750px; margin: 0 auto; background: var(--surface); padding: 40px; border-radius: 24px; border: 1px solid var(--border); scroll-margin-top: 100px; }
+        .input-group label { display: block; margin-bottom: 8px; font-weight: 700; color: var(--secondary); font-size: 0.7rem; letter-spacing: 2px; }
+        .input-group input, .input-group textarea {
+            width: 100%; padding: 15px; background: #050505; border: 1px solid var(--border);
+            color: var(--text); border-radius: 12px; font-family: inherit; outline: none; transition: 0.3s;
+        }
+        .input-group input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(255, 45, 85, 0.1); }
+        .btn-submit { width: 100%; padding: 20px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 1.1rem; transition: 0.3s; }
+        .btn-submit:hover { filter: brightness(1.2); transform: translateY(-2px); box-shadow: 0 10px 30px var(--primary); }
 
         #selection-toast {
             position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
-            background: var(--secondary); color: #000; padding: 15px 30px;
-            border-radius: 50px; font-weight: 800; z-index: 10000; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+            background: var(--secondary); color: #000; padding: 15px 40px;
+            border-radius: 50px; font-weight: 900; z-index: 10000; transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            letter-spacing: 2px; box-shadow: 0 15px 40px rgba(0, 255, 136, 0.4);
         }
         #selection-toast.show { bottom: 40px; }
+        #selection-toast.error { background: var(--primary); color: white; }
 
-        /* =========================================
-            FORM
-            =========================================
-        */
-        .form-wrap { max-width: 750px; margin: 0 auto; background: var(--surface); padding: 40px; border-radius: 24px; border: 1px solid var(--border); }
-        .input-group { margin-bottom: 20px; }
-        .input-group label { display: block; margin-bottom: 8px; font-weight: 700; color: var(--text-dim); font-size: 0.75rem; text-transform: uppercase; }
-        .input-group input, .input-group textarea {
-            width: 100%; padding: 15px; background: var(--bg); border: 1px solid var(--border);
-            color: var(--text); border-radius: 12px; font-family: inherit; outline: none;
-        }
-        .btn-submit { width: 100%; padding: 20px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 1.1rem; }
-
-        .particle { position: fixed; top: -50px; z-index: 1; pointer-events: none; animation: fall linear forwards; }
-        @keyframes fall { 0% { transform: translateY(0) rotate(0deg); opacity: 0; } 10% { opacity: 0.5; } 100% { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
-        
-        footer { padding: 60px 5%; text-align: center; border-top: 1px solid var(--border); margin-top: 60px; }
-
-        /* LOADING SCREEN FIX */
-        #gs-loader { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: #000; z-index: 10001; 
-            display: flex; flex-direction: column; justify-content: center; align-items: center; 
-            transition: opacity 1s ease-out, visibility 1s; 
-        }
+        #gs-loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 10001; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.8s; }
         body.is-loaded #gs-loader { opacity: 0; visibility: hidden; }
+
+        footer { padding: 60px 5%; text-align: center; border-top: 1px solid var(--border); margin-top: 60px; color: var(--text-dim); }
+
+        /* VALIDATION EFFECTS */
+        .missing-section { 
+            background: rgba(255, 45, 85, 0.08) !important; 
+            border: 2px solid var(--primary) !important; 
+            box-shadow: 0 0 40px rgba(255, 45, 85, 0.3);
+            animation: section-shake 0.5s ease-in-out;
+        }
+
+        @keyframes section-shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
     </style>
 </head>
 <body>
 
+    <div class="scanline"></div>
+
     <div id="gs-loader">
-        <h1 style="color: var(--primary); font-size: 4rem; font-family: 'Outfit'; letter-spacing: -2px;">GS CANDY</h1>
-        <div style="width: 200px; height: 3px; background: #222; margin-top: 25px; border-radius: 10px; overflow: hidden;">
-            <div style="width: 100%; height: 100%; background: var(--secondary); animation: load 2.5s forwards cubic-bezier(0.65, 0, 0.35, 1);"></div>
+        <div class="status-indicator"><div class="dot"></div> SYNCING_RESOURCES</div>
+        <h1 style="color: var(--primary); font-size: 5rem; letter-spacing: -3px;">GS CANDY</h1>
+        <div style="width: 250px; height: 2px; background: #111; margin-top: 20px; position: relative;">
+            <div style="width: 100%; height: 100%; background: var(--secondary); animation: load 1.2s forwards ease-in-out;"></div>
         </div>
     </div>
-    <style>@keyframes load { 0% { transform: translateX(-100%); } 100% { transform: translateX(0); } }</style>
+    <style>@keyframes load { 0% { width: 0; } 100% { width: 100%; } }</style>
 
-    <div id="selection-toast">SELECTION SAVED! SCROLL TO FINALIZE.</div>
+    <div id="selection-toast">UPLINK_SUCCESSFUL</div>
 
     <nav>
-        <div class="nav-logo">GS CANDY</div>
+        <div class="nav-logo">GS CANDY <code style="font-size: 0.6rem; background: #111; padding: 2px 5px; border-radius: 4px; margin-left: 10px;">VER_2026.3</code></div>
+        <div class="nav-links">
+            <a href="#menu">Shop</a>
+            <a href="#pieces-section">Add-ons</a>
+            <a href="#payment-section">Payment</a>
+            <a href="#reserve">Reserve</a>
+        </div>
         <div class="nav-actions">
-            <a href="#menu" class="nav-btn">Shop Now</a>
-            <button onclick="document.documentElement.setAttribute('data-theme', document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark')" style="background:none; border:1px solid var(--border); color:var(--text); padding:8px 12px; border-radius:8px; cursor:pointer; font-size: 1.2rem;">🌓</button>
+            <button onclick="document.documentElement.setAttribute('data-theme', document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark')" style="background:none; border:1px solid var(--border); color:var(--text); padding:8px 12px; border-radius:8px; cursor:pointer;">🌓</button>
+            <a href="#reserve" class="nav-btn">ORDER NOW</a>
         </div>
     </nav>
 
     <header class="hero">
-        <h1>CANDY<br>REFINED.</h1>
-        <p>Premium selection curated by Gawynt and Satvik. Experience the Gold Standard of sweets in 2026.</p>
+        <div class="status-indicator"><div class="dot"></div> GS_PROTOCOL // ACTIVE</div>
+        <h1>CANDY<br><span style="color: var(--secondary);">UPGRADED.</span></h1>
+        <p>Premium selection curated by Gawynt and Satvik. Experience the 2026 Gold Standard of sweets.</p>
     </header>
 
     <div class="container">
         <div class="panel">
-            <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 0.8rem;">
-                <span id="progress-text">ORDER PROGRESS</span>
+            <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 0.7rem; color: var(--text-dim);">
+                <span>DEPLOYMENT_PROGRESS</span>
                 <span id="progress-percent">15%</span>
             </div>
             <div class="progress-outer"><div class="progress-inner" id="progress-bar"></div></div>
-            <p style="font-weight: 800; color: var(--secondary);">$75.00 Raised / $500.00 Goal</p>
+            <p style="font-weight: 800; color: var(--secondary); font-size: 0.8rem;">$75.00 / $500.00 FUNDRAISING GOAL</p>
         </div>
 
         <div class="story-panel">
-            <h2 class="story-title" style="color: var(--primary); margin-bottom: 15px; font-size: 2.2rem;">OUR STORY</h2>
+            <h2 class="story-title" style="color: var(--primary); margin-bottom: 10px;">OUR STORY</h2>
             <p class="story-text">
                 Founded by <strong>Gawynt</strong> and <strong>Satvik</strong>, GS CANDY was created to fund our 2026 group ski trip. 
                 We believe in hustle, quality, and giving our local community the absolute gold standard of treats. 
@@ -201,8 +264,8 @@
         </div>
 
         <div id="menu" class="shop-header">
-            <h2>THE MENU</h2>
-            <p>Step 1: Choose your package</p>
+            <h2>01_CHOOSE_PACKAGE</h2>
+            <p style="font-family: 'JetBrains Mono'; font-size: 0.8rem;">INITIALIZE TRANSACTION TYPE</p>
         </div>
 
         <div class="pricing-table">
@@ -223,32 +286,71 @@
             </div>
         </div>
 
-        <div id="bulk" class="bulk-banner">
-            <h2 style="color: var(--secondary);">BULK & EVENTS</h2>
-            <p style="margin: 15px 0;">Ordering more than 10 bags? We offer custom event pricing.</p>
-            <a href="#reserve" class="nav-btn" style="padding: 12px 30px;">Contact Below</a>
+        <div id="pieces-section" class="shop-header pieces-header-wrap">
+            <h2 style="color: var(--secondary);">02_PIECE_MULTIPLIER</h2>
+            <p class="bounce-instruction">ADD EXTRA POWER-UPS TO YOUR ORDER</p>
+        </div>
+
+        <div class="piece-container">
+            <div class="neon-card piece-card" onclick="selectPiece(event, '2 Pieces ($1.00)', this)">
+                <div class="neon-card-inner">
+                    <div class="price-tag" style="font-size: 2.5rem;">$1.00</div>
+                    <p style="font-weight:900; color:var(--primary);">2 PIECES</p>
+                </div>
+            </div>
+            <div class="neon-card piece-card" onclick="selectPiece(event, '3 Pieces ($1.50)', this)">
+                <div class="neon-card-inner">
+                    <div class="price-tag" style="font-size: 2.5rem;">$1.50</div>
+                    <p style="font-weight:900; color:var(--primary);">3 PIECES</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="payment-section" class="shop-header">
+            <h2 style="color: var(--primary);">03_PAYMENT_METHOD</h2>
+            <p style="font-family: 'JetBrains Mono'; font-size: 0.8rem;">SELECT CURRENCY GATEWAY</p>
+        </div>
+
+        <div class="payment-grid">
+            <div class="payment-card" onclick="setPayment('E-Transfer', this)">
+                <h3>E-TRANSFER</h3>
+                <p>Digital transfer to the GS vault.</p>
+            </div>
+            <div class="payment-card" onclick="setPayment('Cash', this)">
+                <h3>PHYSICAL CASH</h3>
+                <p>Standard currency exchange on delivery.</p>
+            </div>
+        </div>
+
+        <div id="bulk" class="bulk-banner" style="text-align: center; margin: 40px 0; border: 1px dashed var(--secondary); padding: 30px; border-radius: 20px;">
+            <h2 style="color: var(--secondary);">BULK_OPERATIONS</h2>
+            <p style="margin: 15px 0;">Ordering 10+? Contact us for specialized pricing.</p>
+            <a href="#reserve" class="nav-btn" style="padding: 15px 40px; display: inline-block;">GET QUOTE</a>
         </div>
 
         <div id="reserve" class="form-wrap">
-            <h2 style="text-align: center; margin-bottom: 30px;">RESERVE ORDER</h2>
+            <h2 style="text-align: center; margin-bottom: 30px; letter-spacing: 4px;">FINALIZE_RESERVATION</h2>
             <form id="gs-form" action="https://formspree.io/f/xpqyzybd" method="POST">
                 <input type="hidden" name="Package" id="hidden-pack" required>
-                <div class="input-group"><label>Full Name</label><input type="text" name="Name" id="f-name" required placeholder="Full Name"></div>
-                <div class="input-group"><label>Phone</label><input type="tel" name="Phone" id="f-phone" required placeholder="000-000-0000"></div>
-                <div class="input-group"><label>Address</label><textarea name="Address" id="f-address" rows="2" required placeholder="Delivery Location"></textarea></div>
-                <div class="input-group"><label>Notes</label><textarea name="Notes" rows="2" placeholder="Specific candy requests?"></textarea></div>
-                <button type="submit" class="btn-submit">Finalize Order</button>
+                <input type="hidden" name="Extra_Pieces" id="hidden-pieces">
+                <input type="hidden" name="Payment_Method" id="hidden-payment">
+                <div class="input-group"><label>CLIENT_ID (FULL NAME)</label><input type="text" name="Name" id="f-name" required placeholder="Full Name"></div>
+                <div class="input-group"><label>COMMS_LINK (PHONE)</label><input type="tel" name="Phone" id="f-phone" required placeholder="000-000-0000"></div>
+                <div class="input-group"><label>SECTOR_COORDINATES (ADDRESS)</label><textarea name="Address" id="f-address" rows="2" required placeholder="Delivery Location"></textarea></div>
+                <div class="input-group"><label>ADDITIONAL_DATA</label><textarea name="Notes" rows="2" placeholder="Specific candy requests..."></textarea></div>
+                <button type="submit" class="btn-submit">EXECUTE_RESERVATION</button>
             </form>
         </div>
     </div>
 
     <footer>
-        <div class="f-logo">GS CANDY</div>
-        <p style="font-size: 0.8rem; color: var(--text-dim);">© 2026 GS CANDY OPERATIONS. ALL SALES FINAL.</p>
+        <div class="f-logo">GS CANDY // TERMINAL</div>
+        <p style="font-family: 'JetBrains Mono'; font-size: 0.6rem; margin-top: 10px;">© 2026 GS CANDY OPERATIONS. ALL SALES FINAL.</p>
     </footer>
 
     <script>
-        window.addEventListener('load', () => { setTimeout(() => { document.body.classList.add('is-loaded'); }, 2000); });
+        // Loading timeout shortened to 1200ms
+        window.addEventListener('load', () => { setTimeout(() => { document.body.classList.add('is-loaded'); }, 1200); });
         
         const bar = document.getElementById('progress-bar');
         const percent = document.getElementById('progress-percent');
@@ -258,15 +360,12 @@
             let base = 15;
             let filled = 0;
             inputs.forEach(id => { if(document.getElementById(id).value.trim().length > 2) filled++; });
-            
-            if(document.getElementById('hidden-pack').value) base += 40; 
-            
-            let total = Math.min(base + (filled * 15), 100);
+            if(document.getElementById('hidden-pack').value) base += 25; 
+            if(document.getElementById('hidden-pieces').value) base += 10;
+            if(document.getElementById('hidden-payment').value) base += 20; 
+            let total = Math.min(base + (filled * 10), 100);
             bar.style.width = total + '%';
             percent.innerText = total + '%';
-            if(total < 50) bar.style.background = '#ff2d55';
-            else if(total < 85) bar.style.background = '#ffcc00';
-            else bar.style.background = '#00ff88';
         }
 
         inputs.forEach(id => document.getElementById(id).addEventListener('input', updateProgress));
@@ -275,32 +374,106 @@
             document.getElementById('hidden-pack').value = val;
             document.querySelectorAll('.pack-card').forEach(p => p.classList.remove('selected'));
             el.classList.add('selected');
+            document.getElementById('menu').classList.remove('missing-section');
+            triggerToast("PACKAGE_SYNCED");
             updateProgress();
+            setTimeout(() => { document.getElementById('pieces-section').scrollIntoView({ behavior: 'smooth' }); }, 500);
+        }
 
+        function selectPiece(event, val, el) {
+            document.getElementById('hidden-pieces').value = val;
+            document.querySelectorAll('.piece-card').forEach(p => p.classList.remove('selected'));
+            el.classList.add('selected');
+            document.getElementById('pieces-section').classList.remove('missing-section');
+            triggerToast("MULTIPLIER_ACTIVE");
+            updateProgress();
+            setTimeout(() => { document.getElementById('payment-section').scrollIntoView({ behavior: 'smooth' }); }, 800);
+        }
+
+        function setPayment(val, el) {
+            document.getElementById('hidden-payment').value = val;
+            document.querySelectorAll('.payment-card').forEach(p => p.classList.remove('selected'));
+            el.classList.add('selected');
+            document.getElementById('payment-section').classList.remove('missing-section');
+            triggerToast("PAYMENT_LOCKED");
+            updateProgress();
+            setTimeout(() => { document.getElementById('reserve').scrollIntoView({ behavior: 'smooth' }); }, 600);
+        }
+
+        function triggerToast(msg, isError = false) {
             const toast = document.getElementById('selection-toast');
+            toast.innerText = msg;
+            if(isError) toast.classList.add('error'); else toast.classList.remove('error');
             toast.classList.add('show');
-            setTimeout(() => { toast.classList.remove('show'); }, 3000);
-            setTimeout(() => { document.getElementById('reserve').scrollIntoView({ behavior: 'smooth' }); }, 500);
+            setTimeout(() => { toast.classList.remove('show'); }, 2500);
         }
 
         document.getElementById('gs-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            if(!document.getElementById('hidden-pack').value) {
-                alert("Please select a package in Step 1 before submitting!"); return;
+            
+            const pkg = document.getElementById('hidden-pack').value;
+            const pieces = document.getElementById('hidden-pieces').value;
+            const pay = document.getElementById('hidden-payment').value;
+            const name = document.getElementById('f-name').value.trim();
+            const phone = document.getElementById('f-phone').value.trim();
+            const addr = document.getElementById('f-address').value.trim();
+
+            if(!pkg) {
+                const sec = document.getElementById('menu');
+                sec.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                sec.classList.add('missing-section');
+                triggerToast("CRITICAL: SELECT PACKAGE", true);
+                return;
             }
+
+            if(!pieces) {
+                const sec = document.getElementById('pieces-section');
+                sec.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                sec.classList.add('missing-section');
+                triggerToast("CRITICAL: SELECT MULTIPLIER", true);
+                return;
+            }
+
+            if(!pay) {
+                const sec = document.getElementById('payment-section');
+                sec.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                sec.classList.add('missing-section');
+                triggerToast("CRITICAL: SELECT PAYMENT", true);
+                return;
+            }
+
+            if(!name || !phone || !addr) {
+                document.getElementById('reserve').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                triggerToast("CRITICAL: DATA INCOMPLETE", true);
+                
+                if(!name) document.getElementById('f-name').style.borderColor = 'var(--primary)';
+                if(!phone) document.getElementById('f-phone').style.borderColor = 'var(--primary)';
+                if(!addr) document.getElementById('f-address').style.borderColor = 'var(--primary)';
+                return;
+            }
+
+            triggerToast("EXECUTING UPLINK...");
             fetch(this.action, { method: 'POST', body: new FormData(this), headers: { 'Accept': 'application/json' } })
-            .then(() => { window.location.href = "https://gawyntgg.github.io/ThankyouGS-Candy/"; });
+            .then(() => { window.location.href = "https://gawyntgg.github.io/ThankyouGS-Candy/"; })
+            .catch(() => triggerToast("UPLINK_FAILED", true));
         });
 
         setInterval(() => {
             const div = document.createElement('div');
-            div.className = 'particle'; div.innerText = '🍬';
+            div.className = 'particle'; 
+            div.innerText = Math.random() > 0.5 ? '1' : '0';
+            div.style.position = 'fixed';
+            div.style.top = '-20px';
             div.style.left = Math.random() * 100 + 'vw';
-            div.style.fontSize = Math.random() * 20 + 15 + 'px';
-            div.style.animationDuration = Math.random() * 3 + 3 + 's';
+            div.style.fontSize = '10px';
+            div.style.color = 'var(--secondary)';
+            div.style.opacity = '0.2';
+            div.style.pointerEvents = 'none';
+            div.style.animation = `fall ${Math.random() * 3 + 3}s linear forwards`;
             document.body.appendChild(div);
-            setTimeout(() => div.remove(), 5000);
-        }, 1200);
+            setTimeout(() => div.remove(), 6000);
+        }, 800);
     </script>
+    <style>@keyframes fall { to { transform: translateY(110vh); opacity: 0; } }</style>
 </body>
 </html>
