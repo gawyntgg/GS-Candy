@@ -91,7 +91,7 @@
             padding: 40px; border-radius: 20px; margin-bottom: 40px; text-align: center;
         }
         .story-text {
-            font-size: 1.25rem; /* Increased Size */
+            font-size: 1.25rem;
             color: var(--text-dim);
             max-width: 800px;
             margin: 0 auto;
@@ -206,36 +206,20 @@
         </div>
 
         <div class="pricing-table">
-            <div class="card pack-card" onclick="setPack('Starter ($3)', this)">
-                <div class="price-tag">$3</div><p style="font-weight:700; color:var(--primary)">1 BAG</p>
+            <div class="card pack-card" onclick="setPack('Starter ($1)', this)">
+                <div class="price-tag">$1</div><p style="font-weight:700; color:var(--primary)">1 BAG</p>
             </div>
-            <div class="card pack-card" onclick="setPack('Double ($5)', this)">
-                <div class="price-tag">$5</div><p style="font-weight:700; color:var(--primary)">2 BAGS</p>
+            <div class="card pack-card" onclick="setPack('Double ($2)', this)">
+                <div class="price-tag">$2</div><p style="font-weight:700; color:var(--primary)">2 BAGS</p>
             </div>
-            <div class="card pack-card" onclick="setPack('Trio ($8)', this)">
-                <div class="price-tag">$8</div><p style="font-weight:700; color:var(--primary)">3 BAGS</p>
+            <div class="card pack-card" onclick="setPack('Trio ($3)', this)">
+                <div class="price-tag">$3</div><p style="font-weight:700; color:var(--primary)">3 BAGS</p>
             </div>
-            <div class="card pack-card" onclick="setPack('Squad ($10)', this)">
-                <div class="price-tag">$10</div><p style="font-weight:700; color:var(--primary)">4 BAGS</p>
+            <div class="card pack-card" onclick="setPack('Squad ($4)', this)">
+                <div class="price-tag">$4</div><p style="font-weight:700; color:var(--primary)">4 BAGS</p>
             </div>
-            <div class="card pack-card" onclick="setPack('Elite ($13)', this)">
-                <div class="price-tag">$13</div><p style="font-weight:700; color:var(--primary)">5 BAGS</p>
-            </div>
-        </div>
-
-        <div class="shop-header">
-            <h2>CANDY TYPE</h2>
-            <p>Step 2: Choose your curator</p>
-        </div>
-
-        <div class="brand-grid">
-            <div class="card brand-card" onclick="setBrand('G Candy', this)">
-                <div class="brand-name">G CANDY</div>
-                <p style="font-size: 0.8rem; color:var(--text-dim)">Gawynt's Mix</p>
-            </div>
-            <div class="card brand-card" onclick="setBrand('S Candy', this)">
-                <div class="brand-name">S CANDY</div>
-                <p style="font-size: 0.8rem; color:var(--text-dim)">Satvik's Mix</p>
+            <div class="card pack-card" onclick="setPack('Elite ($5)', this)">
+                <div class="price-tag">$5</div><p style="font-weight:700; color:var(--primary)">5 BAGS</p>
             </div>
         </div>
 
@@ -249,7 +233,6 @@
             <h2 style="text-align: center; margin-bottom: 30px;">RESERVE ORDER</h2>
             <form id="gs-form" action="https://formspree.io/f/xpqyzybd" method="POST">
                 <input type="hidden" name="Package" id="hidden-pack" required>
-                <input type="hidden" name="Seller" id="hidden-brand" required>
                 <div class="input-group"><label>Full Name</label><input type="text" name="Name" id="f-name" required placeholder="Full Name"></div>
                 <div class="input-group"><label>Phone</label><input type="tel" name="Phone" id="f-phone" required placeholder="000-000-0000"></div>
                 <div class="input-group"><label>Address</label><textarea name="Address" id="f-address" rows="2" required placeholder="Delivery Location"></textarea></div>
@@ -275,8 +258,9 @@
             let base = 15;
             let filled = 0;
             inputs.forEach(id => { if(document.getElementById(id).value.trim().length > 2) filled++; });
-            if(document.getElementById('hidden-pack').value) base += 20;
-            if(document.getElementById('hidden-brand').value) base += 20;
+            
+            if(document.getElementById('hidden-pack').value) base += 40; 
+            
             let total = Math.min(base + (filled * 15), 100);
             bar.style.width = total + '%';
             percent.innerText = total + '%';
@@ -292,13 +276,7 @@
             document.querySelectorAll('.pack-card').forEach(p => p.classList.remove('selected'));
             el.classList.add('selected');
             updateProgress();
-        }
 
-        function setBrand(val, el) {
-            document.getElementById('hidden-brand').value = val;
-            document.querySelectorAll('.brand-card').forEach(b => b.classList.remove('selected'));
-            el.classList.add('selected');
-            updateProgress();
             const toast = document.getElementById('selection-toast');
             toast.classList.add('show');
             setTimeout(() => { toast.classList.remove('show'); }, 3000);
@@ -307,8 +285,8 @@
 
         document.getElementById('gs-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            if(!document.getElementById('hidden-pack').value || !document.getElementById('hidden-brand').value) {
-                alert("Please select Steps 1 & 2 before submitting!"); return;
+            if(!document.getElementById('hidden-pack').value) {
+                alert("Please select a package in Step 1 before submitting!"); return;
             }
             fetch(this.action, { method: 'POST', body: new FormData(this), headers: { 'Accept': 'application/json' } })
             .then(() => { window.location.href = "https://gawyntgg.github.io/ThankyouGS-Candy/"; });
